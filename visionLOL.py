@@ -1,25 +1,18 @@
 import cv2
 import numpy as np
-import os
+from PIL import Image
 
-def calculate_percent_difference(image_path1, image_path2):
-    # Load the two images
-    image1 = cv2.imread(image_path1)
-    image2 = cv2.imread(image_path2)
-
-    # Check if images were successfully loaded
-    if image1 is None or image2 is None:
-        print("Error: Could not load images.")
-        return None
+def calculate_percent_difference(image1, image2):
+    # Convert images to grayscale if they are not already
+    if len(image1.shape) > 2:
+        gray_image1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
+    else:
+        gray_image1 = image1
     
-    # Ensure both images have the same shape
-    if image1.shape != image2.shape:
-        print("Error: Images must have the same dimensions.")
-        return None
-    
-    # Convert images to grayscale
-    gray_image1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
-    gray_image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+    if len(image2.shape) > 2:
+        gray_image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+    else:
+        gray_image2 = image2
 
     # Compute absolute difference between the two images
     diff_image = cv2.absdiff(gray_image1, gray_image2)
@@ -42,7 +35,7 @@ def extract_frames(video_path):
     
     # Check if the video opened successfully
     if not cap.isOpened():
-        print("Error: Could not open video.")
+        print(f"Error: Could not open video at {video_path}.")
         return None
     
     # Get the frame rate of the video
@@ -61,6 +54,11 @@ def extract_frames(video_path):
         
         # Skip frames to get 1 frame per second
         if frame_count % frame_skip == 0 and success:
+            # Check if frame is valid
+            if frame is None:
+                print(f"Error: Frame {frame_count} is empty.")
+                continue
+            
             # Append the frame to the list
             frames.append(frame)
         
@@ -73,10 +71,26 @@ def extract_frames(video_path):
     return frames
 
 # Example usage:
-image_path1 = '/Users/jakemoore/Downloads/image1.jpeg'
-image_path2 = '/Users/jakemoore/Downloads/image2.jpeg'
-percent_diff = calculate_percent_difference(image_path1, image_path2)
+video_path = '/Users/jakemoore/Desktop/League of Legends_06-25-2024_20-50-39-443.mp4'
 
+# Extract frames from the video
+images = extract_frames(video_path)
 
-if percent_diff is not None:
-    print(f"Percent Difference: {percent_diff:.2f}%")
+if images is not None:
+    print(f"Number of frames extracted: {len(images)}")
+else:
+    print("Frame extraction failed. Check the video path and ensure the video file is valid.")
+
+# Choose two frames to compare (for example, first and 50th frames)
+frame1 = images[0]
+pil_image1 = Image.fromarray(cv2.cvtColor(frame1, cv2.COLOR_BGR2RGB))  # Convert BGR to RGB for PIL
+
+frame2 = images[49]
+pil_image2 = Image.fromarray(cv2.cvtColor(frame2, cv2.COLOR_BGR2RGB))  # Convert BGR to RGB for PIL
+
+pil_image1.show()
+pil_image2.show()
+# Calculate percent difference between the frames
+percent_diff = calculate_percent_difference(frame1, frame2)
+
+print(f"Percent Difference between Frames: {percent_diff:.2f}%")
