@@ -93,7 +93,7 @@ if not images:
     exit()
 
 # Load or create the minimap template
-minimap_template_path = '/Users/jakemoore/Desktop/project/minimap.png'
+minimap_template_path = 'minimap.png'
 minimap_template = cv2.imread(minimap_template_path, cv2.IMREAD_GRAYSCALE)
 
 # Assume using the first frame for demonstration
