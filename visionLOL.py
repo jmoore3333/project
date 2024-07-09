@@ -85,7 +85,7 @@ def find_minimap_in_frame(frame, minimap_template):
     else:
         return None
 
-video_path = '/Users/jakemoore/Desktop/project/League of Legends_06-25-2024_20-50-39-443.mp4'
+video_path = 'League of Legends_06-25-2024_20-50-39-443.mp4'
 images = extract_frames(video_path)
 
 if not images:
