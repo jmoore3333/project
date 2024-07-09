@@ -28,13 +28,13 @@ def extract_frames(video_path):
     
     fps = cap.get(cv2.CAP_PROP_FPS)
     frame_skip = int(fps)
-    frame_count = 120
+    frame_count = 0
     success = True
     
     while success:
         success, frame = cap.read()
         
-        if frame_count % frame_skip == 0 and success:
+        if frame_count % (15 * frame_skip) == 0 and success:
             if frame is None:
                 print(f"Error: Frame {frame_count} is empty.")
                 continue
@@ -97,6 +97,7 @@ minimap_template_path = 'minimap.png'
 minimap_template = cv2.imread(minimap_template_path, cv2.IMREAD_GRAYSCALE)
 
 # Assume using the first frame for demonstration
+print(len(images))
 orig_frame = images[1]
 height, width = orig_frame.shape[:2]
 start_row = int(height * 0.50)
