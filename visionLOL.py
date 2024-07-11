@@ -98,22 +98,19 @@ minimap_template = cv2.imread(minimap_template_path, cv2.IMREAD_GRAYSCALE)
 
 # Assume using the first frame for demonstration
 print(len(images))
-orig_frame = images[1]
-height, width = orig_frame.shape[:2]
-start_row = int(height * 0.50)
-start_col = int(width * 0.75)
-frame = orig_frame[start_row:, start_col:]
 
-# Find and extract the minimap region from frame
-minimap_region = find_minimap_in_frame(frame, minimap_template)
-
-if minimap_region is not None:
-    # Display the result (optional)
+for frame in images:
+    # Find and extract the minimap region from the current frame
+    minimap_region = find_minimap_in_frame(frame, minimap_template)
+    
+    # Calculate percent difference between minimap region and template
+    percent_diff = calculate_percent_difference(minimap_region, minimap_template)
+    
+    # Display the current frame and extracted minimap region (optional)
     cv2.imshow('Original image', frame)
     cv2.imshow('Minimap Region', minimap_region)
     cv2.imshow('Template', minimap_template)
-
-    percent_diff = calculate_percent_difference(minimap_region, minimap_template)
+    
     print(f"Percent Difference between Frames: {percent_diff:.2f}%")
 
     # Wait for a key press (waitKey returns the ASCII value of the key pressed or -1 if no key is pressed)
