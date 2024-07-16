@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+import json
+import os
 
 def calculate_percent_difference(image1, image2):
     # Resize image1 to match image2's dimensions if they are not the same
@@ -96,9 +98,6 @@ if not images:
 minimap_template_path = 'minimap.png'
 minimap_template = cv2.imread(minimap_template_path, cv2.IMREAD_GRAYSCALE)
 
-# Assume using the first frame for demonstration
-print(len(images))
-
 for frame in images:
     # Find and extract the minimap region from the current frame
     minimap_region = find_minimap_in_frame(frame, minimap_template)
@@ -112,9 +111,10 @@ for frame in images:
     cv2.imshow('Template', minimap_template)
     
     print(f"Percent Difference between Frames: {percent_diff:.2f}%")
-
+    
     # Wait for a key press (waitKey returns the ASCII value of the key pressed or -1 if no key is pressed)
     cv2.waitKey(0)
 
 # Close all OpenCV windows
 cv2.destroyAllWindows()
+
