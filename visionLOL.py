@@ -87,34 +87,34 @@ def find_minimap_in_frame(frame, minimap_template):
     else:
         return None
 
-video_path = 'League of Legends_06-25-2024_20-50-39-443.mp4'
-images = extract_frames(video_path)
+def vision(videopath):
+    video_path = videopath
+    images = extract_frames(video_path)
 
-if not images:
-    print(f"Error: No frames extracted from {video_path}.")
-    exit()
+    if not images:
+        print(f"Error: No frames extracted from {video_path}.")
+        exit()
 
-# Load or create the minimap template
-minimap_template_path = 'minimap.png'
-minimap_template = cv2.imread(minimap_template_path, cv2.IMREAD_GRAYSCALE)
+    # Load or create the minimap template
+    minimap_template_path = 'minimap.png'
+    minimap_template = cv2.imread(minimap_template_path, cv2.IMREAD_GRAYSCALE)
 
-for frame in images:
-    # Find and extract the minimap region from the current frame
-    minimap_region = find_minimap_in_frame(frame, minimap_template)
-    
-    # Calculate percent difference between minimap region and template
-    percent_diff = calculate_percent_difference(minimap_region, minimap_template)
-    
-    # Display the current frame and extracted minimap region (optional)
-    cv2.imshow('Original image', frame)
-    cv2.imshow('Minimap Region', minimap_region)
-    cv2.imshow('Template', minimap_template)
-    
-    print(f"Percent Difference between Frames: {percent_diff:.2f}%")
-    
-    # Wait for a key press (waitKey returns the ASCII value of the key pressed or -1 if no key is pressed)
-    cv2.waitKey(0)
+    for frame in images:
+        # Find and extract the minimap region from the current frame
+        minimap_region = find_minimap_in_frame(frame, minimap_template)
+        
+        # Calculate percent difference between minimap region and template
+        percent_diff = calculate_percent_difference(minimap_region, minimap_template)
+        
+        # Display the current frame and extracted minimap region (optional)
+        cv2.imshow('Original image', frame)
+        cv2.imshow('Minimap Region', minimap_region)
+        cv2.imshow('Template', minimap_template)
+        
+        print(f"Percent Difference between Frames: {percent_diff:.2f}%")
+        
+        # Wait for a key press (waitKey returns the ASCII value of the key pressed or -1 if no key is pressed)
+        cv2.waitKey(0)
 
-# Close all OpenCV windows
-cv2.destroyAllWindows()
-
+    # Close all OpenCV windows
+    cv2.destroyAllWindows()
